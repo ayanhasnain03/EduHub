@@ -55,9 +55,9 @@ const Register = () => {
               <FormLabel htmlFor="name" children="Name" />
               <Input
                 required
-                id="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
+                id="name"
+                value={name}
+                onChange={e => setName(e.target.value)}
                 placeholder="abc"
                 type={'text'}
                 focusBorderColor={'yellow.500'}
