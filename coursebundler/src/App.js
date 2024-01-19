@@ -8,6 +8,8 @@ import Login from './components/Auth/Login'
 import Register from './components/Auth/Register'
 import ForgetPassword from './components/Auth/ForgetPassword'
 import ResetPassword from './components/Auth/ResetPassword'
+import Contact from './components/contact/Contact'
+import Request from './components/Request/Request'
 const App = () => {
   return (
     <Router>
@@ -19,6 +21,8 @@ const App = () => {
         <Route path='/register' element={<Register/>}/>
         <Route path='/forgetpassword' element={<ForgetPassword/>}/>
         <Route path='/resetpassword/:token' element={<ResetPassword/>}/>
+        <Route path='/contact' element={<Contact/>}/>
+        <Route path='/request' element={<Request/>}/>
       </Routes>
       <Footer/>
     </Router>
