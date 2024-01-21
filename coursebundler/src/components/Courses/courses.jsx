@@ -5,12 +5,12 @@ import {
   Heading,
   Image,
   Input,
-  Link,
   Stack,
   Text,
   VStack,
 } from '@chakra-ui/react';
 import course2 from "../../assets/images/course2.jpg"
+import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 const Course = ({
   views,

@@ -77,10 +77,11 @@ const Home = () => {
       </Box>
       <div className="container2">
         <video
-          autoPlay={true}
           controls
-          controlsList="nodownlod nofullscreen noremoteplayback"
+          autoPlay
           disablePictureInPicture
+          disableRemotePlayback
+          controlsList="nodownload nofullscreen"
           src={introVideo}
         ></video>
       </div>
