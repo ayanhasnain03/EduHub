@@ -10,7 +10,8 @@ import {
 const SideBar = () => {
   const location = useLocation();
   return (
-    <VStack spacing={'8'} p="16" boxShadow={'-2px 0 10px rgba(107,70,193.0.5'}>
+    <VStack spacing={'8'} p="16"     boxShadow={'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;'}
+    >
       <LinkButton text="Dashboard" Icon={RiDashboardFill} url={`dashboard`} active={location.pathname === "/admin/dashboard"} />
       <LinkButton
         text="Create Courses"
