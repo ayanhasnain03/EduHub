@@ -62,3 +62,21 @@ export const getMyProfile = catchAsyncError(async (req, res, next) => {
     user,
   });
 });
+
+
+export const changePassword = catchAsyncError(async (req, res, next) => {
+  const {oldPassword,newPassword}=req.body;
+  if (!oldPassword || !newPassword)
+    return next(new ErrorHandler("Please Add All Fields", 400));
+
+  const user = await User.findById(req.user._id).select("+password")
+  const isMatch = await user.comparePassword(oldPassword);
+  if (!isMatch)
+  return next(new ErrorHandler("Incorrect Old Passowrd ", 401));
+user.password=newPassword;;
+user.save()
+  res.status(200).json({
+    success: true,
+    message:"Password Changed Successfully"
+  });
+});
