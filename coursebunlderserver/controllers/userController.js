@@ -80,3 +80,15 @@ user.save()
     message:"Password Changed Successfully"
   });
 });
+
+export const updateProfile = catchAsyncError(async (req, res, next) => {
+  const {name,email}=req.body;
+  const user = await User.findById(req.user._id).select("+password")
+if (name) user.name=name ;
+if(email) user.email=email;
+user.save()
+  res.status(200).json({
+    success: true,
+    message:"Profile Updated"
+  });
+});
