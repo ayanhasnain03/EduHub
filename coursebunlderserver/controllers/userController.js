@@ -41,3 +41,16 @@ export const login = catchAsyncError(async (req, res, next) => {
     return next(new ErrorHandler("Incorrect Email or  Password", 401));
   sendToken(res, user, `Welcome back ${user.name}`, 200);
 });
+
+
+
+
+export const logout = catchAsyncError(async (req, res, next) => {
+  res.status(200).cookie("token",null,{
+    expires: new Date(Date.now()),
+    httpOnly: true,
+  }).json({
+    success: true,
+    message:"Logged Out",
+  })
+});
