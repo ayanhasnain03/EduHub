@@ -1,6 +1,6 @@
 import { catchAsyncError } from "../middlewares/catchAsyncError.js";
 import { Course } from "../models/Course.js";
-import ErorrHandler from "../utils/errorHandler.js"
+import ErrorHandler from "../utils/errorHandler.js"
 export const getAllCourses = catchAsyncError(async (req, res, next) => {
   const courses = await Course.find().select("-lectures");
   res.status(200).json({
@@ -10,7 +10,7 @@ export const getAllCourses = catchAsyncError(async (req, res, next) => {
 });
 export const createCourse = catchAsyncError(async (req, res, next) => {
   const { title, description, category, createdBy } = req.body;
-  if(!title || !category || !description || !createdBy) return next(new ErorrHandler("Please Add All Fields",400))
+  if(!title || !category || !description || !createdBy) return next(new ErrorHandler("Please Add All Fields",400))
   const file = req.file;
 await Course.create({
     title,
