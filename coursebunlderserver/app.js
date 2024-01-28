@@ -6,6 +6,11 @@ config({
 })
 const app = express()
 
+//using middlewares
+app.use(express.json())
+app.use(express.urlencoded({
+    extended:true
+}))
 import course from "./routes/courseRoutes.js"
 import user from "./routes/userRoutes.js"
 app.use("/api/v1",course)
