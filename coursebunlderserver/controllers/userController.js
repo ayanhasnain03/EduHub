@@ -42,15 +42,23 @@ export const login = catchAsyncError(async (req, res, next) => {
   sendToken(res, user, `Welcome back ${user.name}`, 200);
 });
 
-
-
-
 export const logout = catchAsyncError(async (req, res, next) => {
-  res.status(200).cookie("token",null,{
-    expires: new Date(Date.now()),
-    httpOnly: true,
-  }).json({
+  res
+    .status(200)
+    .cookie("token", null, {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+    })
+    .json({
+      success: true,
+      message: "Logged Out",
+    });
+});
+
+export const getMyProfile = catchAsyncError(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+  res.status(200).json({
     success: true,
-    message:"Logged Out",
-  })
+    user,
+  });
 });
