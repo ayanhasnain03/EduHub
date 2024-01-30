@@ -2,6 +2,7 @@ import { catchAsyncError } from "../middlewares/catchAsyncError.js";
 import ErrorHandler from "../utils/errorHandler.js";
 import { User } from "../models/User.js";
 import { sendToken } from "../utils/sendToken.js";
+import { sendEmail } from "../utils/sendEmail.js";
 
 export const register = catchAsyncError(async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -63,32 +64,58 @@ export const getMyProfile = catchAsyncError(async (req, res, next) => {
   });
 });
 
-
 export const changePassword = catchAsyncError(async (req, res, next) => {
-  const {oldPassword,newPassword}=req.body;
+  const { oldPassword, newPassword } = req.body;
   if (!oldPassword || !newPassword)
     return next(new ErrorHandler("Please Add All Fields", 400));
 
-  const user = await User.findById(req.user._id).select("+password")
+  const user = await User.findById(req.user._id).select("+password");
   const isMatch = await user.comparePassword(oldPassword);
-  if (!isMatch)
-  return next(new ErrorHandler("Incorrect Old Passowrd ", 401));
-user.password=newPassword;;
-user.save()
+  if (!isMatch) return next(new ErrorHandler("Incorrect Old Passowrd ", 401));
+  user.password = newPassword;
+  user.save();
   res.status(200).json({
     success: true,
-    message:"Password Changed Successfully"
+    message: "Password Changed Successfully",
   });
 });
 
 export const updateProfile = catchAsyncError(async (req, res, next) => {
-  const {name,email}=req.body;
-  const user = await User.findById(req.user._id).select("+password")
-if (name) user.name=name ;
-if(email) user.email=email;
-user.save()
+  const { name, email } = req.body;
+  const user = await User.findById(req.user._id).select("+password");
+  if (name) user.name = name;
+  if (email) user.email = email;
+  user.save();
   res.status(200).json({
     success: true,
-    message:"Profile Updated"
+    message: "Profile Updated",
   });
+});
+
+export const updateprofilepicture = catchAsyncError(async (req, res, next) => {
+  // Cloudinary
+  res.status(200).json({
+    success: true,
+    message: "Profile Picture Upload Successfully",
+  });
+});
+
+export const forgetPassword = catchAsyncError(async (req, res, next) => {
+  const { email } = req.body;
+
+  const user = await User.findOne({ email });
+  if (!user) return next(new ErrorHandler("User Not Found", 400));
+  const resetToken = await user.getResetToken();
+  //Send token via email
+  const url = `${process.env.FRONTEND_URL}/resetpassword/${resetToken}`;
+  const message = `Click on the link to reset your password.${url}. if you have not requested then please ignore`;
+  await sendEmail(user.email, "CourseBundler REset Password", message);
+  res.status(200).json({
+    success: true,
+    message: `Reset Token has been sent to ${user.email}`,
+  });
+});
+
+export const resetPassword = catchAsyncError(async (req, res, next) => {
+
 });
