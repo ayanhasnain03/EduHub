@@ -3,6 +3,7 @@ import ErrorHandler from "../utils/errorHandler.js";
 import { User } from "../models/User.js";
 import { sendToken } from "../utils/sendToken.js";
 import { sendEmail } from "../utils/sendEmail.js";
+import crypto from "crypto";
 
 export const register = catchAsyncError(async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -106,6 +107,7 @@ export const forgetPassword = catchAsyncError(async (req, res, next) => {
   const user = await User.findOne({ email });
   if (!user) return next(new ErrorHandler("User Not Found", 400));
   const resetToken = await user.getResetToken();
+  await user.save()
   //Send token via email
   const url = `${process.env.FRONTEND_URL}/resetpassword/${resetToken}`;
   const message = `Click on the link to reset your password.${url}. if you have not requested then please ignore`;
@@ -117,5 +119,30 @@ export const forgetPassword = catchAsyncError(async (req, res, next) => {
 });
 
 export const resetPassword = catchAsyncError(async (req, res, next) => {
+const {token} = req.params;
 
+const resetPasswordToken = crypto
+.createHash("sha256")
+.update(token)
+.digest("hex");
+
+const user = await User.findOne({
+  resetPasswordToken,
+  resetPasswordExpire:{
+    $gt:Date.now(),
+  },
+})
+if(!user) return next(new ErrorHandler("Token is Invaild and has been expired"))
+
+user.password=req.body.password;
+
+user.resetPasswordExpire=undefined;
+user.resetPasswordToken=undefined;
+
+await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Password Change Successfully",
+  });
 });
