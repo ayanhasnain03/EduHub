@@ -1,11 +1,13 @@
 import express from "express";
 import {
+    addToPlaylist,
   changePassword,
   forgetPassword,
   getMyProfile,
   login,
   logout,
   register,
+  removeFromPlaylist,
   resetPassword,
   updateProfile,
   updateprofilepicture,
@@ -39,5 +41,11 @@ router.route("/forgetpassword").post(forgetPassword);
 
 //Reset Password
 router.route("/resetpassword/:token").put(resetPassword);
+
+//Add To PlayList
+router.route("/addtoplaylist").post(isAuthenticatedUser,addToPlaylist);
+
+//REmove From PlayList
+router.route("/removefromplaylist").delete(isAuthenticatedUser,removeFromPlaylist);
 
 export default router;

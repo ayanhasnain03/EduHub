@@ -4,7 +4,7 @@ import { User } from "../models/User.js";
 import { sendToken } from "../utils/sendToken.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import crypto from "crypto";
-
+import { Course } from "../models/Course.js";
 export const register = catchAsyncError(async (req, res, next) => {
   const { name, email, password } = req.body;
   //   const file= req.file
@@ -146,3 +146,48 @@ await user.save();
     message: "Password Change Successfully",
   });
 });
+
+
+
+export const addToPlaylist = catchAsyncError(async (req, res, next) => {
+const user = await User.findById(req.user._id)
+const course =await Course.findById(req.body._id)
+
+if(!course) return next(new ErrorHandler("Invaild Course Id",404))
+
+const itemExist = user.playlist.find((item)=>{
+  if(item.course.toString() === course._id.toString()) return true;
+})
+if(itemExist) return next(new ErrorHandler("Item Already Exist",409))
+user.playlist.push({
+  course:course._id,
+  poster:course.poster.url,
+})
+
+await user.save()
+
+  res.status(200).json({
+    success: true,
+    message: "Added To Playlist",
+  });
+});
+
+export const removeFromPlaylist = catchAsyncError(async (req, res, next) => {
+  const user = await User.findById(req.user._id)
+  const course =await Course.findById(req.query.id)
+  
+  if(!course) return next(new ErrorHandler("Invaild Course Id",404))
+  
+  //Items Doesen't Matches
+const newPlaylist = user.playlist.filter(item=>{
+  if(item.course.toString() !==course._id.toString()) return item;
+})
+user.playlist=newPlaylist
+  
+  await user.save()
+  
+    res.status(200).json({
+      success: true,
+      message: "Remove from Playlist",
+    });
+  });
