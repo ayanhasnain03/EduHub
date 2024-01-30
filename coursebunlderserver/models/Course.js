@@ -14,7 +14,7 @@ const schema = new mongoose.Schema({
   },
   lectures: [
     {
-      video: {
+      
         title: {
           type: String,
           required: true,
@@ -34,7 +34,6 @@ const schema = new mongoose.Schema({
           },
         },
       },
-    },
   ],
   poster: {
     public_id: {
