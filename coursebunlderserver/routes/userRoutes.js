@@ -2,6 +2,8 @@ import express from "express";
 import {
     addToPlaylist,
   changePassword,
+  deleteMyProfile,
+  deleteUser,
   forgetPassword,
   getAllUsers,
   getMyProfile,
@@ -30,6 +32,9 @@ router.route("/logout").post(logout);
 //Get My Profile
 router.route("/me").get(isAuthenticatedUser, getMyProfile);
 
+//Delete My Profile 
+router.route("/me").delete(isAuthenticatedUser, deleteMyProfile);
+
 //changePassword
 router.route("/changepassword").put(isAuthenticatedUser, changePassword);
 
@@ -54,7 +59,8 @@ router.route("/removefromplaylist").delete(isAuthenticatedUser,removeFromPlaylis
 //Admin ROutes
 
 router.route("/admin/users").get(isAuthenticatedUser,authorizeAdmin,getAllUsers)
-router.route("/admin/user/:id").put(isAuthenticatedUser,authorizeAdmin,updateUserRole)
 
+router.route("/admin/user/:id").put(isAuthenticatedUser,authorizeAdmin,updateUserRole)
+.delete(isAuthenticatedUser,authorizeAdmin,deleteUser)
 
 export default router;
