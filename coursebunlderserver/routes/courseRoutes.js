@@ -3,6 +3,7 @@ import {
   addLecture,
   createCourse,
   deleteCourse,
+  deleteLecture,
   getAllCourses,
   getCourseLectures,
 } from "../controllers/courseController.js";
@@ -25,4 +26,6 @@ router
   .delete(isAuthenticatedUser,authorizeAdmin,deleteCourse)
 
 //Delete Lecture
+
+router.route("/deletelecture").delete(isAuthenticatedUser,authorizeAdmin,deleteLecture)
 export default router;
