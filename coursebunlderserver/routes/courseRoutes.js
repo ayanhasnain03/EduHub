@@ -2,6 +2,7 @@ import express from "express";
 import {
   addLecture,
   createCourse,
+  deleteCourse,
   getAllCourses,
   getCourseLectures,
 } from "../controllers/courseController.js";
@@ -20,7 +21,8 @@ router
 router
   .route("/course/:id")
   .get(isAuthenticatedUser, getCourseLectures)
-  .post(isAuthenticatedUser, authorizeAdmin, singleUpload, addLecture);
+  .post(isAuthenticatedUser, authorizeAdmin, singleUpload, addLecture)
+  .delete(isAuthenticatedUser,authorizeAdmin,deleteCourse)
 
 //Delete Lecture
 export default router;
