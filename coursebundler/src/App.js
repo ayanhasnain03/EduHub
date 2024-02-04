@@ -23,14 +23,16 @@ import Dashboard from './components/Admin/Dashboard/Dashboard';
 import CreateCourse from './components/Admin/CreateCourse/CreateCourse';
 import AdminCourses from './components/Admin/AdminCourses/AdminCourses';
 import Users from './components/Admin/Users/Users';
+import { useSelector } from 'react-redux';
 const App = () => {
   window.addEventListener('contextmenu', e => {
     e.preventDefault();
   });
 
+  const { isAuthenticated, user } = useSelector(state => state.user);
   return (
     <Router>
-      <Header />
+      <Header isAuthenticated={isAuthenticated} user={user} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/courses" element={<Courses />} />
@@ -52,7 +54,7 @@ const App = () => {
 
         {/* Admin Routes */}
         <Route path="/admin/dashboard" element={<Dashboard />} />
-        <Route path="/admin/createcourse" element={<CreateCourse/>} />
+        <Route path="/admin/createcourse" element={<CreateCourse />} />
         <Route path="/admin/courses" element={<AdminCourses />} />
         <Route path="/admin/users" element={<Users />} />
       </Routes>

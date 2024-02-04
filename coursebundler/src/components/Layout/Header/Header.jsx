@@ -19,12 +19,10 @@ const LinkButton = ({ url = '/', title = 'Home',onClose }) => (
     <Button variant={'ghost'}>{title}</Button>
   </Link>
 );
-const Header = () => {
+const Header = ({isAuthenticated=false,user}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const isAuthenticated = true;
-  const user = {
-    role: 'admin',
-  };
+
+
   const logoutHandler=()=>{
     console.log("logout");
   onClose()
