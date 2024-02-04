@@ -14,9 +14,22 @@ export const login = (email, password) => async dispatch => {
         withCredentials: true,
       }
     );
-    console.log(data);
     dispatch({ type: 'loginSuccess', payload: data });
+    console.log(data);
   } catch (error) {
     dispatch({ type: 'loginFail', payload: error.response.data.message });
+  }
+};
+
+export const loadUser = () => async dispatch => {
+  try {
+    dispatch({ type: 'loadUserRequest' });
+    const { data } = await axios.get(`${server}/me`, {
+      withCredentials: true,
+    });
+    dispatch({ type: 'loadUserSuccess', payload: data.user });
+    console.log(data.user);
+  } catch (error) {
+    dispatch({ type: 'loadUserFail', payload: error.response.data.message });
   }
 };

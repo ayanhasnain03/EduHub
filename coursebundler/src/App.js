@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './components/Home/Home';
 import Header from './components/Layout/Header/Header';
@@ -23,13 +23,33 @@ import Dashboard from './components/Admin/Dashboard/Dashboard';
 import CreateCourse from './components/Admin/CreateCourse/CreateCourse';
 import AdminCourses from './components/Admin/AdminCourses/AdminCourses';
 import Users from './components/Admin/Users/Users';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import toast, { Toaster } from 'react-hot-toast';
+import { loadUser } from './redux/action/user';
+import { ProtectedRoute } from 'protected-route-react';
 const App = () => {
   window.addEventListener('contextmenu', e => {
     e.preventDefault();
   });
+  const dispatch = useDispatch();
+  const { isAuthenticated, user, message, error } = useSelector(
+    state => state.user
+  );
 
-  const { isAuthenticated, user } = useSelector(state => state.user);
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch({ type: 'clearError' });
+    }
+    if (message) {
+      toast.success(message);
+      dispatch({ type: 'clearMessage' });
+    }
+  }, [dispatch, error, message]);
+
+  useEffect(() => {
+    dispatch(loadUser());
+  }, [dispatch]);
   return (
     <Router>
       <Header isAuthenticated={isAuthenticated} user={user} />
@@ -37,14 +57,28 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/courses" element={<Courses />} />
         <Route path="/course/:id" element={<CoursePage />} />
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={
+            <ProtectedRoute isAuthenticated={!isAuthenticated} redirect="/profile" >
+              <Login />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/register" element={<Register />} />
         <Route path="/forgetpassword" element={<ForgetPassword />} />
         <Route path="/resetpassword/:token" element={<ResetPassword />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/request" element={<Request />} />
         <Route path="/about" element={<About />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute  isAuthenticated={isAuthenticated}  >
+              <Profile/>
+            </ProtectedRoute>
+          }
+        />
         <Route path="/profile/changepassword" element={<ChangePassword />} />
         <Route path="/updateprofile" element={<UpdateProfile />} />
         <Route path="/subscribe" element={<Subscribe />} />
@@ -59,6 +93,7 @@ const App = () => {
         <Route path="/admin/users" element={<Users />} />
       </Routes>
       <Footer />
+      <Toaster />
     </Router>
   );
 };
