@@ -7,7 +7,7 @@ import crypto from "crypto";
 import { Course } from "../models/Course.js";
 import cloudinary from "cloudinary";
 import getDataUri from "../utils/dataUri.js";
-
+import { Stats } from "../models/stats.js";
 export const register = catchAsyncError(async (req, res, next) => {
   const { name, email, password } = req.body;
 
@@ -96,19 +96,18 @@ export const updateProfile = catchAsyncError(async (req, res, next) => {
 });
 
 export const updateprofilepicture = catchAsyncError(async (req, res, next) => {
-
   const file = req.file;
   const user = await User.findById(req.user._id);
 
   const fileUri = getDataUri(file);
   const mycloud = await cloudinary.v2.uploader.upload(fileUri.content);
-await cloudinary.v2.uploader.destroy(user.avatar.public_id);
+  await cloudinary.v2.uploader.destroy(user.avatar.public_id);
 
-user.avatar={
-  public_id: mycloud.public_id,
-  url: mycloud.secure_url,
-}
-await user.save()
+  user.avatar = {
+    public_id: mycloud.public_id,
+    url: mycloud.secure_url,
+  };
+  await user.save();
   res.status(200).json({
     success: true,
     message: "Profile Picture Change Successfully",
@@ -210,9 +209,9 @@ export const getAllUsers = catchAsyncError(async (req, res, next) => {
   const user = await User.find({});
   if (!user) return next(new ErrorHandler("user not found", 404));
 
- res.status(200).json({
-  success: true,
-  user
+  res.status(200).json({
+    success: true,
+    user,
   });
 });
 
@@ -220,41 +219,55 @@ export const getAllUsers = catchAsyncError(async (req, res, next) => {
 export const updateUserRole = catchAsyncError(async (req, res, next) => {
   const user = await User.findById(req.params.id);
   if (!user) return next(new ErrorHandler("user not found", 404));
-if(user.role==="user") user.role="admin"
-else user.role="user"
-await user.save()
- res.status(200).json({
-  success: true,
- message:"Role Updated"
+  if (user.role === "user") user.role = "admin";
+  else user.role = "user";
+  await user.save();
+  res.status(200).json({
+    success: true,
+    message: "Role Updated",
   });
 });
 
 export const deleteUser = catchAsyncError(async (req, res, next) => {
   const user = await User.findById(req.params.id);
   if (!user) return next(new ErrorHandler("user not found", 404));
-await cloudinary.v2.uploader.destroy(user.avatar.public_id);
-//cancel subscription
+  await cloudinary.v2.uploader.destroy(user.avatar.public_id);
+  //cancel subscription
 
-await user.deleteOne()
+  await user.deleteOne();
 
- res.status(200).json({
-  success: true,
- message:"User Delete Succesfully"
+  res.status(200).json({
+    success: true,
+    message: "User Delete Succesfully",
   });
 });
 
 export const deleteMyProfile = catchAsyncError(async (req, res, next) => {
   const user = await User.findById(req.user._id);
 
-await cloudinary.v2.uploader.destroy(user.avatar.public_id);
-//cancel subscription
+  await cloudinary.v2.uploader.destroy(user.avatar.public_id);
+  //cancel subscription
 
-await user.deleteOne()
+  await user.deleteOne();
 
- res.status(200).cookie("token",null,{
-  expires:new Date(Date.now())
- }).json({
-  success: true,
- message:"User Delete Succesfully"
-  });
+  res
+    .status(200)
+    .cookie("token", null, {
+      expires: new Date(Date.now()),
+    })
+    .json({
+      success: true,
+      message: "User Delete Succesfully",
+    });
 });
+
+  User.watch().on("change", async () => {
+    const stats = await Stats.find({}).sort({ createdAt: "desc" }).limit(1);
+    const subscription = await User.find({ "subscription.status": "active" });
+
+    stats[0].users = await User.countDocuments();
+    stats[0].subscription = subscription.length;
+    stats[0].createdAt = new Date(Date.now());
+    await stats[0].save();
+  });
+
