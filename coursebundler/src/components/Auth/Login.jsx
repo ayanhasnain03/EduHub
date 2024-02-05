@@ -16,9 +16,10 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const dispatch = useDispatch()
   const submitHandler =(e)=>{
-    e.preventDefault()
-    dispatch(login(email,password))
+    e.preventDefault();
+    dispatch(login(email,password));
   }
+ 
   return (
     <>
       <Container h={'95vh'}>
