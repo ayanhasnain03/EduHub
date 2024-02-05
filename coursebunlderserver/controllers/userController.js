@@ -55,7 +55,7 @@ export const logout = catchAsyncError(async (req, res, next) => {
        maxAge:3600000*5,
        secure:true,
        sameSite:'none',
-       domain: '.netlify.app'
+       domain: '.vercel.app'
     })
     .json({
       success: true,
