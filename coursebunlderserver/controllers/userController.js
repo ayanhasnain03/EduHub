@@ -53,7 +53,7 @@ export const logout = catchAsyncError(async (req, res, next) => {
       expires: new Date(Date.now()),
       httpOnly: true,
       // secure: true,
-      sameSite: "none",
+      // sameSite: "none",
     })
     .json({
       success: true,
