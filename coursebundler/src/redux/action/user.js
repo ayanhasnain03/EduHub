@@ -11,7 +11,8 @@ export const login = (email, password) => async dispatch => {
         headers: {
           'Content-Type': 'application/json',
         },
-        withCredentials: true,
+        mode:'cors',
+            withCredentials:true
       }
     );
     dispatch({ type: 'loginSuccess', payload: data });
