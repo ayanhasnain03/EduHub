@@ -1,5 +1,6 @@
 import { server } from '../store';
 import axios from 'axios';
+
 export const login = (email, password) => async dispatch => {
   try {
     dispatch({ type: 'loginRequest' });
@@ -34,13 +35,11 @@ export const loadUser = () => async dispatch => {
 
 export const logout = () => async dispatch => {
   try {
-    dispatch({ type: 'logoutRequest' });
-    const { data } = await axios.post(`${server}/logout`, {
+    const { data } = await axios.get(`${server}/logout`, {
       withCredentials: true,
     });
     dispatch({ type: 'logoutSuccess', payload: data.message });
-    console.log(data);
   } catch (error) {
-    dispatch({ type: 'logoutFail', payload: error.response.data.message });
+    dispatch({ type: 'logoutFail', payload: error.data.message });
   }
 };

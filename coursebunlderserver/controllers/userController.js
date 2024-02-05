@@ -43,7 +43,7 @@ export const login = catchAsyncError(async (req, res, next) => {
   const isMatch = await user.comparePassword(password);
   if (!isMatch)
     return next(new ErrorHandler("Incorrect Email or  Password", 401));
-  sendToken(res,user,`Welcome back ${user.name}`, 200);
+  sendToken(res, user, `Welcome back ${user.name}`, 200);
 });
 
 export const logout = catchAsyncError(async (req, res, next) => {
@@ -52,8 +52,8 @@ export const logout = catchAsyncError(async (req, res, next) => {
     .cookie("token", null, {
       expires: new Date(Date.now()),
       httpOnly: true,
-      secure: true,
       sameSite: "none",
+      secure: true,
     })
     .json({
       success: true,
