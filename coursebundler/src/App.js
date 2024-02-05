@@ -60,7 +60,10 @@ const App = () => {
         <Route
           path="/login"
           element={
-            <ProtectedRoute isAuthenticated={!isAuthenticated} redirect="/profile" >
+            <ProtectedRoute
+              isAuthenticated={!isAuthenticated}
+              redirect="/profile"
+            >
               <Login />
             </ProtectedRoute>
           }
@@ -74,8 +77,8 @@ const App = () => {
         <Route
           path="/profile"
           element={
-            <ProtectedRoute  isAuthenticated={isAuthenticated}  >
-              <Profile/>
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <Profile />
             </ProtectedRoute>
           }
         />
