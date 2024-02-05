@@ -5,6 +5,7 @@ export const sendToken = (res, user, message, statusCode = 200) => {
     httpOnly:true,
     secure:true,
     sameSite:'none',
+   domain:".vercel.app"
   };
   res.status(statusCode).cookie("token", token, options).json({
     success: true,

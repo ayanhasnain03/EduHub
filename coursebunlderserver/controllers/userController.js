@@ -54,6 +54,7 @@ export const logout = catchAsyncError(async (req, res, next) => {
       httpOnly: true,
       secure: true,
       sameSite: "none",
+      domain:".vercel.app"
     })
     .json({
       success: true,
