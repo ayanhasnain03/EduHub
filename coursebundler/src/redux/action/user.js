@@ -1,6 +1,5 @@
 import { server } from '../store';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 export const login = (email, password) => async dispatch => {
   try {
     dispatch({ type: 'loginRequest' });
@@ -9,7 +8,7 @@ export const login = (email, password) => async dispatch => {
       { email, password },
       {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-type': 'application/json',
         },
         withCredentials: true,
       }
@@ -32,13 +31,17 @@ export const loadUser = () => async dispatch => {
   }
 };
 
-export const logout = () => async dispatch => {
+export const logout = () => async (dispatch) => {
   try {
-    const { data } = await axios.get(`${server}/logout`, {
-      withCredentials: true,
-    });
+    const { data } = await axios.post(
+      `${server}/logout`,
+      {},
+      {
+        withCredentials: true,
+      }
+    );
     dispatch({ type: 'logoutSuccess', payload: data.message });
   } catch (error) {
-    dispatch({ type: 'logoutFail', payload: error.data.message });
+    dispatch({ type: 'logoutFail', payload: error.response?.data?.message || 'An error occurred during logout.' });
   }
 };
