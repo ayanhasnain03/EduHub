@@ -45,25 +45,21 @@ export const login = catchAsyncError(async (req, res, next) => {
     return next(new ErrorHandler("Incorrect Email or  Password", 401));
   sendToken(res, user, `Welcome back ${user.name}`, 200);
 });
-export const logout = async (req, res) => {
-  try {
-    res
-      .status(200)
-      .cookie("token", null, {
-        expires: new Date(Date.now()),
-        httpOnly: true,
-      })
-      .json({
-        success: true,
-        message: "Logged Out Successfully",
-      });
-  } catch (error) {
-    return res.status(400).json({
-      success: false,
-      message: error.message,
+
+export const logout = catchAsyncError(async (req, res, next) => {
+  res
+    .status(200)
+    .cookie("token", null, {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+      // secure: true,
+      sameSite: "none",
+    })
+    .json({
+      success: true,
+      message: "Logged Out",
     });
-  }
-};
+});
 export const getMyProfile = catchAsyncError(async (req, res, next) => {
   const user = await User.findById(req.user._id);
   res.status(200).json({
