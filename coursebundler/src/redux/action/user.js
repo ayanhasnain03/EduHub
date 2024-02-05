@@ -1,6 +1,6 @@
 import { server } from '../store';
 import axios from 'axios';
-
+import Cookies from 'js-cookie';
 export const login = (email, password) => async dispatch => {
   try {
     dispatch({ type: 'loginRequest' });
@@ -11,8 +11,7 @@ export const login = (email, password) => async dispatch => {
         headers: {
           'Content-Type': 'application/json',
         },
-        mode:'cors',
-            withCredentials:true
+        withCredentials: true,
       }
     );
     dispatch({ type: 'loginSuccess', payload: data });
@@ -28,7 +27,6 @@ export const loadUser = () => async dispatch => {
       withCredentials: true,
     });
     dispatch({ type: 'loadUserSuccess', payload: data.user });
-    console.log(data.user);
   } catch (error) {
     dispatch({ type: 'loadUserFail', payload: error.response.data.message });
   }

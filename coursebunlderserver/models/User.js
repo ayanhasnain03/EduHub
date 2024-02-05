@@ -68,7 +68,6 @@ schema.methods.getJWTToken = function () {
     expiresIn: "15d",
   });
 };
-
 schema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
