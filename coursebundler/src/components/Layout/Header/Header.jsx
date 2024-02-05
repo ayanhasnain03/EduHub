@@ -26,7 +26,6 @@ const Header = ({isAuthenticated=false,user}) => {
 
 const disaptch = useDispatch()
   const logoutHandler=()=>{
-    
   onClose()
   disaptch(logout())
   }
