@@ -68,7 +68,9 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/register" element={<Register />} />
+        <Route path="/register" element={<ProtectedRoute isAuthenticated={!isAuthenticated} redirect="/profile" >
+          <Register/>
+        </ProtectedRoute>} />
         <Route path="/forgetpassword" element={<ForgetPassword />} />
         <Route path="/resetpassword/:token" element={<ResetPassword />} />
         <Route path="/contact" element={<Contact />} />

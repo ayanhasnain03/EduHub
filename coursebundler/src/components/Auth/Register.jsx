@@ -8,22 +8,22 @@ import {
   Input,
   VStack,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-export const fileUploadCss={
-  
-    cursor: 'pointer',
-    marginLeft: '-5%',
-    width: '110%',
-    border: 'none',
-    height: '100%',
-    color: '#ECC948',
-    backgroundColor:"white"
-  
-}
+import { useDispatch } from 'react-redux';
+import { register } from '../../redux/action/user';
+export const fileUploadCss = {
+  cursor: 'pointer',
+  marginLeft: '-5%',
+  width: '110%',
+  border: 'none',
+  height: '100%',
+  color: '#ECC948',
+  backgroundColor: 'white',
+};
 
 const fileUploadStyle = {
-  '&::file-selector-button':fileUploadCss
+  '&::file-selector-button': fileUploadCss,
 };
 
 const Register = () => {
@@ -31,25 +31,37 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [imagePrev, setImagePrev] = useState('');
-  const [image, setImage] = useState("")
+  const [image, setImage] = useState('');
 
-  
-  const changeImageHandler =(e)=>{
+  const dispatch = useDispatch();
+
+  const changeImageHandler = e => {
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onload=()=>{
-      setImagePrev(reader.result)
+    reader.onload = () => {
+      setImagePrev(reader.result);
       setImage(file);
-    }
-  }
+    };
+  };
+
+  const submitHandler = e => {
+    e.preventDefault();
+    const myForm = new FormData();
+    myForm.append('name', name);
+    myForm.append('email', email);
+    myForm.append('password', password);
+    myForm.append('file', image);
+    dispatch(register(myForm));
+  };
+
   return (
     <>
       <Container h={'95vh'}>
         <VStack h={'full'} justifyContent={'center'} spacing={'16'}>
           <Heading children={'Registration'} textTransform={'uppercase'} />
 
-          <form style={{ width: '100%' }}>
+          <form onSubmit={submitHandler} style={{ width: '100%' }}>
             <Box my="4" display={'flex'} justifyContent={'center'}>
               <Avatar size={'2xl'} src={imagePrev} />
             </Box>

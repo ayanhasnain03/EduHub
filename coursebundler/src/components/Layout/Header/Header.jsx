@@ -16,19 +16,19 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../../redux/action/user';
 
-const LinkButton = ({ url = '/', title = 'Home',onClose }) => (
+const LinkButton = ({ url = '/', title = 'Home', onClose }) => (
   <Link onClick={onClose} to={url}>
     <Button variant={'ghost'}>{title}</Button>
   </Link>
 );
-const Header = ({isAuthenticated=false,user}) => {
+const Header = ({ isAuthenticated = false, user }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-const disaptch = useDispatch()
-  const logoutHandler=()=>{
-  onClose()
-  disaptch(logout())
-  }
+  const disaptch = useDispatch();
+  const logoutHandler = () => {
+    onClose();
+    disaptch(logout());
+  };
   return (
     <>
       <ColorModeSwitcher />
@@ -38,11 +38,10 @@ const disaptch = useDispatch()
         width="12"
         height={'12'}
         rounded="full"
-        zIndex={"overlay"}
+        zIndex={'overlay'}
         position={'fixed'}
         top="6"
         left="6"
-        
       >
         <RiMenu5Fill />
       </Button>
@@ -52,11 +51,19 @@ const disaptch = useDispatch()
           <DrawerHeader borderBottomWidth={'1px'}>COURSE BUNDELER</DrawerHeader>
           <DrawerBody>
             <VStack spacing={'4'} alignItems="flex-start">
-              <LinkButton onClose={onClose}  url="/" title="Home" />
-              <LinkButton onClose={onClose}  url="/courses" title="Browse Courses" />
-              <LinkButton onClose={onClose}  url="/request" title="Request a Course" />
-              <LinkButton onClose={onClose}  url="/contact" title="Contact Us" />
-              <LinkButton onClose={onClose}  url="/about" title="About" />
+              <LinkButton onClose={onClose} url="/" title="Home" />
+              <LinkButton
+                onClose={onClose}
+                url="/courses"
+                title="Browse Courses"
+              />
+              <LinkButton
+                onClose={onClose}
+                url="/request"
+                title="Request a Course"
+              />
+              <LinkButton onClose={onClose} url="/contact" title="Contact Us" />
+              <LinkButton onClose={onClose} url="/about" title="About" />
               <HStack
                 justifyContent={'space-evenly'}
                 position={'absolute'}
@@ -71,19 +78,20 @@ const disaptch = useDispatch()
                           <Button variant={'ghost'} colorScheme={'yellow'}>
                             Profile
                           </Button>
-                          
                         </Link>
-                        <Button variant={'ghost'} colorScheme={'yellow'}
+                        <Button
+                          variant={'ghost'}
+                          colorScheme={'yellow'}
                           onClick={logoutHandler}
-                          >
-                            <RiLogoutBoxLine />
-                            Logout
-                          </Button>
+                        >
+                          <RiLogoutBoxLine />
+                          Logout
+                        </Button>
                       </HStack>
                       {user && user.role === 'admin' && (
                         <Link onClick={onClose} to="/admin/dashboard">
                           <Button colorScheme={'purple'} variant={'ghost'}>
-                            <RiDashboardFill style={{margin:"4px"}} />
+                            <RiDashboardFill style={{ margin: '4px' }} />
                             Dashboard
                           </Button>
                         </Link>
@@ -92,7 +100,7 @@ const disaptch = useDispatch()
                   </>
                 ) : (
                   <>
-                    <Link  onClick={onClose} to="/login">
+                    <Link onClick={onClose} to="/login">
                       <Button colorScheme={'yellow'}>Login</Button>
                     </Link>
 

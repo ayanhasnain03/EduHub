@@ -14,9 +14,23 @@ export const login = (email, password) => async dispatch => {
       }
     );
     dispatch({ type: 'loginSuccess', payload: data });
-    console.log(data);
   } catch (error) {
     dispatch({ type: 'loginFail', payload: error.response.data.message });
+  }
+};
+
+export const register = formdata => async dispatch => {
+  try {
+    dispatch({ type: 'registerRequest' });
+    const { data } = await axios.post(`${server}/register`, formdata, {
+      headers: {
+        'Content-type': 'multipart/form-data',
+      },
+      withCredentials: true,
+    });
+    dispatch({ type: 'registerSuccess', payload: data });
+  } catch (error) {
+    dispatch({ type: 'registerFail', payload: error.response.data.message });
   }
 };
 export const loadUser = () => async dispatch => {
@@ -31,7 +45,7 @@ export const loadUser = () => async dispatch => {
   }
 };
 
-export const logout = () => async (dispatch) => {
+export const logout = () => async dispatch => {
   try {
     const { data } = await axios.post(
       `${server}/logout`,
@@ -42,6 +56,10 @@ export const logout = () => async (dispatch) => {
     );
     dispatch({ type: 'logoutSuccess', payload: data.message });
   } catch (error) {
-    dispatch({ type: 'logoutFail', payload: error.response?.data?.message || 'An error occurred during logout.' });
+    dispatch({
+      type: 'logoutFail',
+      payload:
+        error.response?.data?.message || 'An error occurred during logout.',
+    });
   }
 };
