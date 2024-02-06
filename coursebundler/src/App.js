@@ -68,9 +68,17 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/register" element={<ProtectedRoute isAuthenticated={!isAuthenticated} redirect="/profile" >
-          <Register/>
-        </ProtectedRoute>} />
+        <Route
+          path="/register"
+          element={
+            <ProtectedRoute
+              isAuthenticated={!isAuthenticated}
+              redirect="/profile"
+            >
+              <Register />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/forgetpassword" element={<ForgetPassword />} />
         <Route path="/resetpassword/:token" element={<ResetPassword />} />
         <Route path="/contact" element={<Contact />} />
@@ -84,15 +92,47 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/profile/changepassword" element={<ChangePassword />} />
-        <Route path="/updateprofile" element={<UpdateProfile />} />
-        <Route path="/subscribe" element={<Subscribe />} />
+        <Route
+          path="/profile/changepassword"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <ChangePassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/updateprofile"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <UpdateProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/subscribe"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <Subscribe />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/paymentsuccess" element={<PaymentSuccess />} />
         <Route path="/paymentfail" element={<PaymentFail />} />
         <Route path="/*" element={<NotFound />} />
 
         {/* Admin Routes */}
-        <Route path="/admin/dashboard" element={<Dashboard />} />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute
+              isAuthenticated={isAuthenticated}
+              adminRoute={true}
+              isAdmin={user && user.role === 'admin'}
+            >
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/admin/createcourse" element={<CreateCourse />} />
         <Route path="/admin/courses" element={<AdminCourses />} />
         <Route path="/admin/users" element={<Users />} />

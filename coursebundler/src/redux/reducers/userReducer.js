@@ -69,7 +69,7 @@ export const userReducer = createReducer({}, builder => {
       state.loading = false;
       state.user = null;
       state.isAuthenticated = false;
-      state.message = action.payload.message;
+      state.message = action.payload;
     })
     .addCase('logoutFail', (state, action) => {
       state.loading = false;
