@@ -23,14 +23,20 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { RiDeleteBin7Fill } from 'react-icons/ri';
 import { fileUploadCss } from '../Auth/Register';
+import { updateProfilePicture } from '../../redux/action/profile';
+import { useDispatch } from 'react-redux';
 const Profile = ({user}) => {
+  const dispatch = useDispatch();
 
   const removeFromPlaylistHandler = id => {
     console.log('playlist deleted');
   };
   const changeImageSubmitHandler = (e,image)=>{
-    e.preventDefault()
-console.log(image)
+    e.preventDefault();
+    const myForm = new FormData();
+    myForm.append('file', image);
+    dispatch(updateProfilePicture(myForm));
+
   }
   const { isOpen, onClose, onOpen } = useDisclosure();
   return (

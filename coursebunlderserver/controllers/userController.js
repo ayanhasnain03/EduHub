@@ -75,9 +75,11 @@ export const changePassword = catchAsyncError(async (req, res, next) => {
 
   const user = await User.findById(req.user._id).select("+password");
   const isMatch = await user.comparePassword(oldPassword);
-  if (!isMatch) return next(new ErrorHandler("Incorrect Old Passowrd ", 401));
+  if (!isMatch){
+    return next(new ErrorHandler("Old Password Inccorect", 400));
+  } 
   user.password = newPassword;
-  user.save();
+  await user.save();
   res.status(200).json({
     success: true,
     message: "Password Changed Successfully",

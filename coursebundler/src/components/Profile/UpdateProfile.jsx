@@ -1,13 +1,19 @@
 import { Button, Container, Heading, Input, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
-
+import { useDispatch } from 'react-redux';
+import { updateProfile } from '../../redux/action/profile';
 const UpdateProfile = () => {
+  const dispatch = useDispatch();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-
+  
+  const submitHandler = (e) => {
+    e.preventDefault();
+    dispatch(updateProfile(name, email));
+  };
   return (
     <Container py="16" minH={'90vh'}>
-      <form>
+      <form onSubmit={submitHandler}>
         <Heading
           textTransform={'uppercase'}
           children="Update Profile"
@@ -34,7 +40,7 @@ const UpdateProfile = () => {
             focusBorderColor={'yellow.500'}
           />
           <Button w="full" colorScheme="yellow" type="submit">
-           Update
+            Update
           </Button>
         </VStack>
       </form>
