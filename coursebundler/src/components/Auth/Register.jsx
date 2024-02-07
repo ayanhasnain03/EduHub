@@ -9,9 +9,10 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { register } from '../../redux/action/user';
+import toast from 'react-hot-toast';
 export const fileUploadCss = {
   cursor: 'pointer',
   marginLeft: '-5%',
@@ -27,13 +28,14 @@ const fileUploadStyle = {
 };
 
 const Register = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading, message, error } = useSelector(state => state.user);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [imagePrev, setImagePrev] = useState('');
   const [image, setImage] = useState('');
-
-  const dispatch = useDispatch();
 
   const changeImageHandler = e => {
     const file = e.target.files[0];
@@ -53,7 +55,19 @@ const Register = () => {
     myForm.append('password', password);
     myForm.append('file', image);
     dispatch(register(myForm));
+    navigate('/');
   };
+
+  useEffect(() => {
+    if (message) {
+      toast.success(message);
+      dispatch({ type: 'clearMessage' });
+    }
+    if (error) {
+      toast.error(error);
+      dispatch({ type: 'clearError' });
+    }
+  }, [dispatch, error, message]);
 
   return (
     <>
@@ -121,7 +135,11 @@ const Register = () => {
             <Box my="4">
               Already Signup?{' '}
               <Link to="/login">
-                <Button variant="link" colorScheme={'yellow'}>
+                <Button
+                  isLoading={loading}
+                  variant="link"
+                  colorScheme={'yellow'}
+                >
                   Login
                 </Button>{' '}
                 here

@@ -1,14 +1,32 @@
 import { Button, Container, Heading, Input, VStack } from '@chakra-ui/react';
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { resetPassword } from '../../redux/action/profile';
+import { useDispatch, useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
 
 const ResetPassword = () => {
+  const dispatch = useDispatch();
   const [password, setPassword] = useState('');
-  const params = useParams()
-
+  const { loading, message, error } = useSelector(state => state.profile);
+  const { token } = useParams();
+  const submitHandler = e => {
+    e.preventDefault();
+    dispatch(resetPassword(token,password));
+  };
+  useEffect(() => {
+    if (message) {
+      toast.success(message);
+      dispatch({type:"clearMessage"})
+    }
+    if (error) {
+      toast.error(error);
+      dispatch({type:"clearError"})
+    }
+  }, [dispatch, message, error]);
   return (
     <Container py={"16"}h={"90vh"} >
-      <form>
+      <form onSubmit={submitHandler} >
         <Heading
           children="Reset Password"
           my="16"
@@ -25,7 +43,7 @@ const ResetPassword = () => {
             type={'text'}
             focusBorderColor={'yellow.500'}
           />
-          <Button type="submit" w={'full'} colorScheme="yellow">
+          <Button isLoading={loading} type="submit" w={'full'} colorScheme="yellow">
             Reset Password
           </Button>
         </VStack>
