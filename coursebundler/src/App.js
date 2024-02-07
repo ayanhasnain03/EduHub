@@ -108,8 +108,8 @@ const App = () => {
             <Route
               path="/updateprofile"
               element={
-                <ProtectedRoute isAuthenticated={isAuthenticated}>
-                  <UpdateProfile />
+                <ProtectedRoute isAuthenticated={isAuthenticated} >
+                  <UpdateProfile user={user} />
                 </ProtectedRoute>
               }
             />

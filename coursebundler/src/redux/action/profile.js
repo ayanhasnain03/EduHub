@@ -36,6 +36,7 @@ export const updateProfilePicture = formdata => async dispatch => {
       }
     );
     dispatch({ type: 'updateProfilePictureSuccess', payload: data.message });
+    
   } catch (error) {
     dispatch({
       type: 'updateProfilePictureFail',

@@ -105,7 +105,7 @@ export const profileReducer = createReducer({}, builder => {
     })
     .addCase('updateProfilePictureFail', (state, action) => {
       state.loading = false;
-      state.message = action.payload;
+      state.error = action.payload;
     })
     .addCase('changePasswordRequest', state => {
       state.loading = true;
@@ -116,7 +116,7 @@ export const profileReducer = createReducer({}, builder => {
     })
     .addCase('changePasswordFail', (state, action) => {
       state.loading = false;
-      state.error=action.payload;
+      state.error = action.payload;
     })
     .addCase('clearError', state => {
       state.error = null;
