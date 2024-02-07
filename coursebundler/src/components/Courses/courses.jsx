@@ -12,6 +12,9 @@ import {
 import course2 from "../../assets/images/course2.jpg"
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
+import { useEffect } from 'react';
+import {useDispatch, useSelector} from "react-redux"
+import { getAllCourses } from '../../redux/action/course';
 const Course = ({
   views,
   title,
@@ -70,17 +73,23 @@ const Course = ({
 const Courses = () => {
   const [keyword, setkeyword] = useState('');
   const [category, setCategory] = useState('');
-  const  addToPlaylistHandler = ()=>{
-    console.log("add to cart")
+  const  addToPlaylistHandler = (courseId)=>{
+    console.log("add to cart",courseId)
   }
   const categories = [
-    'Web Developemnt',
+    'webdevelopemnt',
     'Machine Learning',
     'Data Structure',
     'Andriod Developemnt',
     'Game Development',
     'Cloud',
   ];
+  const dispatch = useDispatch()
+  const {courses}=useSelector(state=>state.course)
+  useEffect(() => {
+  dispatch(getAllCourses(category,keyword))
+  }, [category,keyword,dispatch])
+  
   return (
     <Container minH={'95vh'} maxW="container.lg" paddingY={'8'}>
       <Heading children="All Courses" m={'8'} />
@@ -113,16 +122,25 @@ const Courses = () => {
         justifyContent={['flex-start', 'space-evenly']}
         alignItems={['center', 'flex-start']}
       >
-        <Course
-          title={'Sample'}
-          description={'sample'}
-          views={23}
-          imageSrc={course2}
-          id={'sample'}
-          creator={'sample'}
-          lectureCount={23}
-          addToPlaylistHandler={addToPlaylistHandler}
-        />
+      {
+        courses.length > 0 ?(
+          courses && courses.map((item)=>(
+            <Course
+            key={item._id}
+            title={item.title}
+            description={item.description}
+            views={item.views}
+            imageSrc={item.poster.url}
+            id={item._id}
+            creator={item.createdBy}
+            lectureCount={item.numOfVideos}
+            addToPlaylistHandler={addToPlaylistHandler}
+          />
+          ))
+        ):(
+          <Heading mt={4} children="Courses Not Found"  />
+        )
+      }
       </Stack>
     </Container>
   );
