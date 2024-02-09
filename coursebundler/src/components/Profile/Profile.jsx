@@ -36,7 +36,7 @@ const Profile = ({ user }) => {
   const removeFromPlaylistHandler = async id => {
     await dispatch(removeFromPlaylist(id))
     dispatch(loadUser())
-    console.log(id)
+
   };
   const changeImageSubmitHandler = async (e, image) => {
     e.preventDefault();

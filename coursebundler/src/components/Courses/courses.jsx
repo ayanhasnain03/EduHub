@@ -84,8 +84,8 @@ const Courses = () => {
   const [keyword, setkeyword] = useState('');
   const [category, setCategory] = useState('');
   const addToPlaylistHandler =async courseId => {
-    await dispatch(addToPlaylist(courseId));
-    dispatch(loadUser())
+ dispatch(addToPlaylist(courseId));
+dispatch(loadUser())
   };
   const categories = [
     'webdevelopemnt',
