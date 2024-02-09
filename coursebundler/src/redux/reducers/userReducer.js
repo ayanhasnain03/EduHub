@@ -119,6 +119,17 @@ export const profileReducer = createReducer({}, builder => {
       state.loading = false;
       state.error = action.payload;
     })
+    .addCase('removeToPlaylistRequest', state => {
+      state.loading = true;
+    })
+    .addCase('removeToPlaylistSuccess', (state, action) => {
+      state.loading = false;
+      state.courses = action.payload;
+    })
+    .addCase('removeToPlaylistFail', (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
     .addCase('clearError', state => {
       state.error = null;
     })

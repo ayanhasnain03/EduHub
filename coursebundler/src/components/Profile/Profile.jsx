@@ -23,18 +23,21 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { RiDeleteBin7Fill } from 'react-icons/ri';
 import { fileUploadCss } from '../Auth/Register';
-import { updateProfilePicture } from '../../redux/action/profile';
+import { removeFromPlaylist, updateProfilePicture } from '../../redux/action/profile';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadUser } from '../../redux/action/user';
 import toast from 'react-hot-toast';
 const Profile = ({ user }) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const { loading, error, message } = useSelector(state => state.profile);
+
   const navigate = useNavigate()
   const dispatch = useDispatch();
-  const removeFromPlaylistHandler = id => {
-    console.log('playlist deleted');
+  const removeFromPlaylistHandler = async id => {
+    await dispatch(removeFromPlaylist(id))
+    dispatch(loadUser())
+    console.log(id)
   };
-
   const changeImageSubmitHandler = async (e, image) => {
     e.preventDefault();
     const myForm = new FormData();
@@ -43,7 +46,6 @@ const Profile = ({ user }) => {
 dispatch(loadUser())
 navigate("/profile")
   };
-  const { loading, error, message } = useSelector(state => state.profile);
   useEffect(() => {
     if (error) {
       toast.error(error);
@@ -138,7 +140,7 @@ navigate("/profile")
                     Watch Now
                   </Button>
                 </Link>
-                <Button onClick={() => removeFromPlaylistHandler(element.id)}>
+                <Button onClick={() => removeFromPlaylistHandler(element.course)}>
                   <RiDeleteBin7Fill />
                 </Button>
               </HStack>
