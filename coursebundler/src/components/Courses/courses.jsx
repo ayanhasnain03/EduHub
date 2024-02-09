@@ -66,7 +66,9 @@ const Course = ({
       />
       <Stack direction={['column', 'row']} alignItems="center">
         <Link to={`/course/${id}`}>
-          <Button  isLoading={loading} colorScheme={'yellow'}>Watch Now</Button>
+          <Button isLoading={loading} colorScheme={'yellow'}>
+            Watch Now
+          </Button>
         </Link>
         <Button
           colorScheme={'yellow'}
@@ -83,9 +85,9 @@ const Courses = () => {
   const dispatch = useDispatch();
   const [keyword, setkeyword] = useState('');
   const [category, setCategory] = useState('');
-  const addToPlaylistHandler =async courseId => {
- dispatch(addToPlaylist(courseId));
-dispatch(loadUser())
+  const addToPlaylistHandler = async courseId => {
+    await dispatch(addToPlaylist(courseId));
+    dispatch(loadUser());
   };
   const categories = [
     'webdevelopemnt',
