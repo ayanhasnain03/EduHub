@@ -23,28 +23,35 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { RiDeleteBin7Fill } from 'react-icons/ri';
 import { fileUploadCss } from '../Auth/Register';
-import { removeFromPlaylist, updateProfilePicture } from '../../redux/action/profile';
+import {
+  removeFromPlaylist,
+  updateProfilePicture,
+} from '../../redux/action/profile';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadUser } from '../../redux/action/user';
+import { cancelSubscription, loadUser } from '../../redux/action/user';
 import toast from 'react-hot-toast';
 const Profile = ({ user }) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const { loading, error, message } = useSelector(state => state.profile);
+  const {
+    loading: subscriptionLoading,
+    error: subscriptionError,
+    message: subscriptionMessage,
+  } = useSelector(state => state.subscription);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const removeFromPlaylistHandler = async id => {
-    await dispatch(removeFromPlaylist(id))
-    dispatch(loadUser())
-
+    await dispatch(removeFromPlaylist(id));
+    dispatch(loadUser());
   };
   const changeImageSubmitHandler = async (e, image) => {
     e.preventDefault();
     const myForm = new FormData();
     myForm.append('file', image);
- dispatch(updateProfilePicture(myForm));
-dispatch(loadUser())
-navigate("/profile")
+    dispatch(updateProfilePicture(myForm));
+    dispatch(loadUser());
+    navigate('/profile');
   };
   useEffect(() => {
     if (error) {
@@ -55,8 +62,19 @@ navigate("/profile")
       toast.success(message);
       dispatch({ type: 'clearMessage' });
     }
-  }, [dispatch, error, message]);
+    if (subscriptionError) {
+      toast.error(subscriptionError);
+      dispatch({ type: 'clearError' });
+    }
+    if (subscriptionMessage) {
+      toast.success(subscriptionMessage);
+      dispatch({ type: 'clearMessage' });
+    }
+  }, [dispatch, error, message, subscriptionError, subscriptionMessage]);
 
+  const cancelSubscriptionHandler = () => {
+    dispatch(cancelSubscription());
+  };
   return (
     <Container minH={'95vh'} maxW="container.lg" py="8">
       <Heading children="Profile" textTransform={'uppercase'} />
@@ -69,7 +87,15 @@ navigate("/profile")
         padding="8"
       >
         <VStack>
-          <Avatar boxSize={'48'} src={user.avatar.url} />
+          {user.avatar.url ? (
+            <>
+              <Avatar boxSize={'48'} src={user.avatar.url} />
+            </>
+          ) : (
+            <>
+              <Avatar boxSize={'48'} />
+            </>
+          )}{' '}
           <Button
             isLoading={loading}
             onClick={onOpen}
@@ -96,7 +122,12 @@ navigate("/profile")
             <HStack>
               <Text children="Subscription" fontWeight={'bold'} />
               {user.subscription && user.subscription.status === 'active' ? (
-                <Button color={'yellow.500'} variant="unstyled">
+                <Button
+                  onClick={cancelSubscriptionHandler}
+                  isLoading={subscriptionLoading}
+                  color={'yellow.500'}
+                  variant="unstyled"
+                >
                   {' '}
                   Cancel Subscription
                 </Button>
@@ -140,7 +171,9 @@ navigate("/profile")
                     Watch Now
                   </Button>
                 </Link>
-                <Button onClick={() => removeFromPlaylistHandler(element.course)}>
+                <Button
+                  onClick={() => removeFromPlaylistHandler(element.course)}
+                >
                   <RiDeleteBin7Fill />
                 </Button>
               </HStack>

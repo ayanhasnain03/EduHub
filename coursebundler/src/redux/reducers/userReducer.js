@@ -150,6 +150,17 @@ export const subscriptionReducer = createReducer({}, builder => {
       state.loading = false;
       state.error=action.payload
     })
+    .addCase('cancelSubscriptionRequest', state => {
+      state.loading = true;
+    })
+    .addCase('cancelSubscriptionSuccess', (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase('cancelSubscriptionFail', (state, action) => {
+      state.loading = false;
+      state.error=action.payload
+    })
     .addCase('clearError', state => {
       state.error = null;
     })

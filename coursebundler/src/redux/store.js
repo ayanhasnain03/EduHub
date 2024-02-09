@@ -11,3 +11,4 @@ const store = configureStore({
 });
 export default store;
 export const server = `https://unusual-eel-tweed-jacket.cyclic.app/api/v1`;
+// http://unusual-eel-tweed-jacket.cyclic.app/api/v1

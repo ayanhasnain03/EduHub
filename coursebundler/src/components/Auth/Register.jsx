@@ -11,7 +11,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { register } from '../../redux/action/user';
+import { loadUser, register } from '../../redux/action/user';
 import toast from 'react-hot-toast';
 export const fileUploadCss = {
   cursor: 'pointer',
@@ -47,15 +47,17 @@ const Register = () => {
     };
   };
 
-  const submitHandler = e => {
+  const submitHandler = async e => {
     e.preventDefault();
     const myForm = new FormData();
     myForm.append('name', name);
     myForm.append('email', email);
     myForm.append('password', password);
     myForm.append('file', image);
-    dispatch(register(myForm));
-    navigate('/');
+    await dispatch(register(myForm));
+
+    dispatch(loadUser());
+    navigate('/profile');
   };
 
   useEffect(() => {
