@@ -1,5 +1,5 @@
 import { configureStore, createReducer } from '@reduxjs/toolkit';
-export const course = createReducer({ courses: [] }, builder => {
+export const course = createReducer({ courses: [], lectures: [] }, builder => {
   builder
     .addCase('allCourseRequest', state => {
       state.loading = true;
@@ -9,6 +9,17 @@ export const course = createReducer({ courses: [] }, builder => {
       state.courses = action.payload;
     })
     .addCase('allCourseFail', (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    .addCase('getCourseRequest', state => {
+      state.loading = true;
+    })
+    .addCase('getCourseSuccess', (state, action) => {
+      state.loading = false;
+      state.lectures = action.payload;
+    })
+    .addCase('getCourseFail', (state, action) => {
       state.loading = false;
       state.error = action.payload;
     })
