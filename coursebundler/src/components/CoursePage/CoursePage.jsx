@@ -1,43 +1,17 @@
 import { Box, Grid, Heading, Text, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import introVideo from '../../assets/videos/introvideo.mp4';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { getCourseLectures } from '../../redux/action/course';
+import Loader from '../Layout/Loader/Loader';
 const CoursePage = ({ user }) => {
   const [lectureNumber, setLectureNumber] = useState(0);
-
-  const lectures = [
-    {
-      _id: 'sdsddtsa',
-      title: 'sample',
-      description: 'sample serif bold',
-      video: {
-        url: 'dadad',
-      },
-    },
-    {
-      _id: 'sdsdsrda',
-      title: 'sample',
-      description: 'sample serif bold',
-      video: {
-        url: 'dadad',
-      },
-    },
-    {
-      _id: 'sdsddrsa',
-      title: 'sample',
-      description: 'sample serif bold',
-      video: {
-        url: 'dadad',
-      },
-    },
-  ];
+  const { lectures ,loading} = useSelector(state => state.course);
   const dispatch = useDispatch();
   const params = useParams();
   useEffect(() => {
     dispatch(getCourseLectures(params.id));
-  }, [dispatch, params.id]);
+  }, [dispatch,params.id]);
   if (
     user.role !== 'admin' &&
     (user.subscription === undefined || user.subscription.status !== 'active')
@@ -45,23 +19,30 @@ const CoursePage = ({ user }) => {
     return <Navigate to={'/subscribe'} />;
   }
   return (
-    <Grid minH={'90vh'} templateColumns={['1fr', '3fr 1fr']}>
-      <Box>
-        <video
-          width={'100%'}
-          controls
-          autoPlay
-          disablePictureInPicture
-          disableRemotePlayback
-          controlsList="nodownload nofullscreen"
-          src={introVideo}
-        ></video>
-        <Heading
-          m="4"
-          children={`#${lectureNumber + 1} ${lectures[lectureNumber].title}`}
-        />
+  <>
+  {
+    loading?(
+      <Loader/>
+    ):(
+      <Grid minH={'90vh'} templateColumns={['1fr', '3fr 1fr']}>
+    {
+      lectures && lectures.length > 0 ? (
+        <>
+          <Box>
+      {lectures[lectureNumber] && (
+          <video
+            width={'100%'}
+            controls
+            autoPlay
+            disablePictureInPicture
+            disableRemotePlayback
+            controlsList="nodownload"
+            src={lectures[lectureNumber].video.url}
+          ></video>
+        )}
+      <Heading m="4" children={`#${lectureNumber + 1} ${lectures[lectureNumber]?.title}`} />
         <Heading m="4" children="Description" />
-        <Text m="4" children={lectures[lectureNumber].description} />
+        <Text m="4" children={lectures[lectureNumber]?.description} />
       </Box>
       <VStack>
         {lectures.map((element, index) => (
@@ -82,7 +63,15 @@ const CoursePage = ({ user }) => {
           </button>
         ))}
       </VStack>
+        </>
+      ):(
+        <Heading children="No lectures" />
+      )
+    }
     </Grid>
+    )
+  }
+  </>
   );
 };
 

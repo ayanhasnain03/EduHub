@@ -43,14 +43,14 @@ const Profile = ({ user }) => {
   const dispatch = useDispatch();
   const removeFromPlaylistHandler = async id => {
     await dispatch(removeFromPlaylist(id));
-    dispatch(loadUser());
+    await dispatch(loadUser());
     toast.success("remove from playlist")
   };
   const changeImageSubmitHandler = async (e, image) => {
     e.preventDefault();
     const myForm = new FormData();
     myForm.append('file', image);
-    dispatch(updateProfilePicture(myForm));
+    await dispatch(updateProfilePicture(myForm));
     dispatch(loadUser());
     navigate('/profile');
   };
