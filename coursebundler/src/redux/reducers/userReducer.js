@@ -123,7 +123,7 @@ export const profileReducer = createReducer({}, builder => {
     })
     .addCase('removeToPlaylistSuccess', (state, action) => {
       state.loading = false;
-      state.courses = action.payload;
+      state.message = action.payload;
     })
     .addCase('removeToPlaylistFail', (state, action) => {
       state.loading = false;

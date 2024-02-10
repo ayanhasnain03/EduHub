@@ -44,6 +44,7 @@ const Profile = ({ user }) => {
   const removeFromPlaylistHandler = async id => {
     await dispatch(removeFromPlaylist(id));
     dispatch(loadUser());
+    toast.success("remove from playlist")
   };
   const changeImageSubmitHandler = async (e, image) => {
     e.preventDefault();
@@ -69,6 +70,7 @@ const Profile = ({ user }) => {
     if (subscriptionMessage) {
       toast.success(subscriptionMessage);
       dispatch({ type: 'clearMessage' });
+      dispatch(loadUser())
     }
   }, [dispatch, error, message, subscriptionError, subscriptionMessage]);
 
