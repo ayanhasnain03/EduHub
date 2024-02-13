@@ -55,7 +55,6 @@ const Register = () => {
     myForm.append('password', password);
     myForm.append('file', image);
     await dispatch(register(myForm));
-
     dispatch(loadUser());
     navigate('/profile');
   };

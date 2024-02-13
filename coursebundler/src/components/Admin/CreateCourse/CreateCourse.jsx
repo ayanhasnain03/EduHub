@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Box,
   Button,
   Container,
   Grid,
@@ -13,7 +12,12 @@ import {
 import cursor from '../../../assets/images/cursor.png';
 import SideBar from '../SideBar';
 import { fileUploadCss } from '../../Auth/Register';
+import { useDispatch, useSelector } from 'react-redux';
+import { createCourse } from '../../../redux/action/admin';
+import toast from 'react-hot-toast';
 const CreateCourse = () => {
+  const dispatch = useDispatch();
+  const { loading, message, error } = useSelector(state => state.admin);
   const categories = [
     'Web Developemnt',
     'Machine Learning',
@@ -29,15 +33,38 @@ const CreateCourse = () => {
   const [imagePrev, setImagePrev] = useState('');
   const [image, setImage] = useState('');
 
-  const changeImageHandler =(e)=>{
+  const changeImageHandler = e => {
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onload=()=>{
-      setImagePrev(reader.result)
+    reader.onload = () => {
+      setImagePrev(reader.result);
       setImage(file);
+    };
+  };
+
+  const submitHandler = e => {
+    e.preventDefault();
+    const myForm = new FormData();
+    myForm.append('title', title);
+    myForm.append('description', description);
+    myForm.append('category', category);
+    myForm.append('createdBy', createdBy);
+    myForm.append('file', image);
+    dispatch(createCourse(myForm));
+    console.log(myForm);
+  };
+
+  useEffect(() => {
+    if (message) {
+      toast.success(message);
+      dispatch({ type: 'clearMessage' });
     }
-  }
+    if (error) {
+      toast.error(error);
+      dispatch({ type: 'clearError' });
+    }
+  }, [dispatch, error, message]);
   return (
     <Grid
       css={{
@@ -47,14 +74,14 @@ const CreateCourse = () => {
       templateColumns={['1fr', '5fr 1fr']}
     >
       <Container p="16">
-        <form>
+        <form onSubmit={submitHandler}>
           <Heading
             textTransform={'uppercase'}
             children="Create Course"
             my="16"
             textAlign={['center', 'left']}
           />
-          <VStack m="auto" spacing={'8'}  >
+          <VStack m="auto" spacing={'8'}>
             <Input
               required
               value={title}
@@ -99,18 +126,24 @@ const CreateCourse = () => {
               type={'file'}
               focusBorderColor={'purple.300'}
               css={{
-                '&::file-selector-button':{
-                  ...fileUploadCss,color:"purple"
-                }
+                '&::file-selector-button': {
+                  ...fileUploadCss,
+                  color: 'purple',
+                },
               }}
               onChange={changeImageHandler}
             />
-            {
-              imagePrev && (
-                <Image src={imagePrev} boxSize="64" objectFit={"contain"}  />
-              )
-            }
-            <Button w="full" colorScheme={"purple"} type='submit' >Create</Button>
+            {imagePrev && (
+              <Image src={imagePrev} boxSize="64" objectFit={'contain'} />
+            )}
+            <Button
+              isLoading={loading}
+              type="submit"
+              w="full"
+              colorScheme={'purple'}
+            >
+              Create
+            </Button>
           </VStack>
         </form>
       </Container>
