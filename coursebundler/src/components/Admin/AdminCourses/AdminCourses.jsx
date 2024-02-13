@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Box,
   Button,
@@ -20,37 +20,30 @@ import cursor from '../../../assets/images/cursor.png';
 import SideBar from '../SideBar';
 import { RiDeleteBin7Fill } from 'react-icons/ri';
 import CourseModal from './CourseModal';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { loadUser } from '../../../redux/action/user';
+import { getAllCourses, getCourseLectures } from '../../../redux/action/course';
 const AdminCourses = () => {
+  const dispatch = useDispatch();
   const { isOpen, onClose, onOpen } = useDisclosure();
-
-  const courses = [
-    {
-      _id: 'sdf',
-      title: 'React Course',
-      category: 'web development',
-      poster: {
-        url: 'https://media.istockphoto.com/id/1262283526/photo/indian-girl-student-wear-headphones-learning-online-watching-webinar-class-looking-at-laptop.jpg?s=612x612&w=is&k=20&c=TUiqLixZRfEvu2CYvoKZRgpMOq0_ioMCUOLI7sWBpjU=',
-      },
-      createdBy: 'ayan',
-      views: 123,
-      numOfVideos: 12,
-    },
-  ];
-  const courseDetailsHandler = userId => {
-    console.log(userId);
+  const { courses,lectures } = useSelector(state => state.course);
+  const courseDetailsHandler = courseId => {
+dispatch(getCourseLectures(courseId))
     onOpen();
   };
-  const deleteButtonHandler = userId => {
-    console.log(userId);
+  const deleteButtonHandler = courseId => {
+    console.log(courseId);
   };
-  const addLectureHandler = (e,id,title,courseId,description) => {
-  e.preventDefault()
+  const addLectureHandler = (e, id, title, courseId, description) => {
+    e.preventDefault();
   };
   const deleteLectureButtonHandler = (courseId, lectureId) => {
     console.log(courseId, lectureId);
   };
- 
+
+  useEffect(() => {
+    dispatch(getAllCourses());
+  }, [dispatch]);
   return (
     <Grid
       css={{
@@ -97,9 +90,10 @@ const AdminCourses = () => {
           onClose={onClose}
           isOpen={isOpen}
           deleteButtonHandler={deleteLectureButtonHandler}
-          id={"courseId"}
+          id={'courseId'}
           courseTitle="React Course"
           addLectureHandler={addLectureHandler}
+          lectures={lectures}
         />
       </Box>
       <SideBar />

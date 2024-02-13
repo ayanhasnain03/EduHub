@@ -25,7 +25,7 @@ const CourseModal = ({
   id,
   deleteLectureButtonHandler,
   courseTitle,
-  lectures = [],
+  lectures,
   addLectureHandler,
 }) => {
   const [title, setTitle] = useState('');
@@ -42,18 +42,23 @@ const CourseModal = ({
       setVideo(file);
     };
   };
-  const closeHandler =()=>{
+  const closeHandler = () => {
     onClose();
-    setTitle("")
-    setVideo("");
-    setVideoPrev("");
-    setDescription("")
-    }
+    setTitle('');
+    setVideo('');
+    setVideoPrev('');
+    setDescription('');
+  };
   return (
-    <Modal isOpen={isOpen} size={'full'} onClose={closeHandler} scrollBehavior='outside' >
+    <Modal
+      isOpen={isOpen}
+      size={'full'}
+      onClose={closeHandler}
+      scrollBehavior="outside"
+    >
       <ModalOverlay />
       <ModalContent>
-        <ModalCloseButton onClick={onClose}/>
+        <ModalCloseButton onClick={onClose} />
         <ModalHeader>{courseTitle}</ModalHeader>
         <ModalBody p="16">
           <Grid templateColumns={['1fr', '3fr 1fr']}>
@@ -63,14 +68,18 @@ const CourseModal = ({
                 <Heading children={`#${id}`} size={'sm'} opacity={0.4} />
               </Box>
               <Heading children={'Lectures'} size="lg" />
-              <VideoCard
-                title="React Course"
-                description="Best React Course"
-                num={1}
-                lectureId="ssadadad"
-                courseId={id}
-                deleteButtonHandler={deleteLectureButtonHandler}
-              />
+
+              {lectures &&
+                lectures.map((item, i) => (
+                  <VideoCard
+                    title={item.title}
+                    description={item.description}
+                    num={1}
+                    lectureId={item._id}
+                    courseId={id}
+                    deleteButtonHandler={deleteLectureButtonHandler}
+                  />
+                ))}
             </Box>
             <Box>
               <form
