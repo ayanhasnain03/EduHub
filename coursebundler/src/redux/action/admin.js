@@ -21,3 +21,18 @@ export const createCourse = formdata => async dispatch => {
     });
   }
 };
+export const deleteCourse = id => async dispatch => {
+  try {
+    dispatch({ type: 'deleteCourseRequest' });
+    const config = {
+      withCredentials: true,
+    };
+    const { data } = await axios.delete(`${server}/course/${id}`, config);
+    dispatch({ type: 'deleteCourseSuccess', payload: data });
+  } catch (error) {
+    dispatch({
+      type: 'deleteCourseFail',
+      payload: error.response.data.message,
+    });
+  }
+};

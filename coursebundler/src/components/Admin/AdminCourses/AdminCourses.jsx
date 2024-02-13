@@ -23,23 +23,36 @@ import CourseModal from './CourseModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadUser } from '../../../redux/action/user';
 import { getAllCourses, getCourseLectures } from '../../../redux/action/course';
+import { deleteCourse } from '../../../redux/action/admin';
+import toast from 'react-hot-toast';
 const AdminCourses = () => {
   const dispatch = useDispatch();
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const { courses,lectures } = useSelector(state => state.course);
+  const { courses, lectures } = useSelector(state => state.course);
+  const { message, loading, error } = useSelector(state => state.admin);
   const courseDetailsHandler = courseId => {
-dispatch(getCourseLectures(courseId))
+    dispatch(getCourseLectures(courseId));
     onOpen();
   };
-  const deleteButtonHandler = courseId => {
-    console.log(courseId);
+  const deleteButtonHandler =async courseId => {
+await dispatch(deleteCourse(courseId));
+dispatch(loadUser())
   };
+  useEffect(() => {
+    if (message) {
+      toast.success(message);
+      dispatch({ type: 'clearMessage' });
+    }
+    if (error) {
+      toast.error(error);
+      dispatch({ type: 'clearErorr' });
+    }
+  }, [dispatch, message, error]);
+
   const addLectureHandler = (e, id, title, courseId, description) => {
     e.preventDefault();
   };
-  const deleteLectureButtonHandler = (courseId, lectureId) => {
-    console.log(courseId, lectureId);
-  };
+  const deleteLectureButtonHandler = courseId => {};
 
   useEffect(() => {
     dispatch(getAllCourses());

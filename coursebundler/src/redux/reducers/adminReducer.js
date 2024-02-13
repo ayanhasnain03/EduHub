@@ -12,6 +12,17 @@ export const createCourse = createReducer({}, builder => {
       state.loading = false;
       state.error = action.payload;
     })
+    .addCase('deleteCourseRequest', state => {
+      state.loading = true;
+    })
+    .addCase('deleteCourseSuccess', (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+    })
+    .addCase('deleteCourseFail', (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
     .addCase('clearError', state => {
       state.error = null;
     })
