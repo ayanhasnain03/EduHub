@@ -23,6 +23,28 @@ export const createCourse = createReducer({}, builder => {
       state.loading = false;
       state.error = action.payload;
     })
+    .addCase('addLectureRequest', state => {
+      state.loading = true;
+    })
+    .addCase('addLectureSuccess', (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase('addLectureFail', (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    .addCase('deleteLectureRequest', state => {
+      state.loading = true;
+    })
+    .addCase('deleteLectureSuccess', (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+    })
+    .addCase('deleteLectureFail', (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
     .addCase('clearError', state => {
       state.error = null;
     })

@@ -68,16 +68,16 @@ const CourseModal = ({
                 <Heading children={`#${id}`} size={'sm'} opacity={0.4} />
               </Box>
               <Heading children={'Lectures'} size="lg" />
-
               {lectures &&
-                lectures.map((item, i) => (
+                lectures.map((e, i) => (
                   <VideoCard
-                    title={item.title}
-                    description={item.description}
+                    key={i}
+                    title={e.title}
+                    description={e.description}
                     num={1}
-                    lectureId={item._id}
+                    lectureId={e._id}
                     courseId={id}
-                    deleteButtonHandler={deleteLectureButtonHandler}
+                    deleteLectureButtonHandler={deleteLectureButtonHandler}
                   />
                 ))}
             </Box>
@@ -150,7 +150,7 @@ function VideoCard({
   description,
   num,
   lectureId,
-  deleteButtonHandler,
+  deleteLectureButtonHandler,
   courseId,
 }) {
   return (
@@ -168,7 +168,7 @@ function VideoCard({
       </Box>
       <Button
         color={'purple.600'}
-        onClick={() => deleteButtonHandler(courseId, lectureId)}
+        onClick={() => deleteLectureButtonHandler(courseId,lectureId)}
       >
         <RiDeleteBin7Fill />
       </Button>

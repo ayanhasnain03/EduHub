@@ -23,20 +23,29 @@ import CourseModal from './CourseModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadUser } from '../../../redux/action/user';
 import { getAllCourses, getCourseLectures } from '../../../redux/action/course';
-import { deleteCourse } from '../../../redux/action/admin';
+import {
+  addLecture,
+  deleteCourse,
+  deleteLecture,
+} from '../../../redux/action/admin';
 import toast from 'react-hot-toast';
+import { useState } from 'react';
 const AdminCourses = () => {
   const dispatch = useDispatch();
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const [courseId, setCourseId] = useState('');
+  const [courseTitle, setCourseTitle] = useState('');
   const { courses, lectures } = useSelector(state => state.course);
   const { message, loading, error } = useSelector(state => state.admin);
-  const courseDetailsHandler = courseId => {
+  const courseDetailsHandler = (courseId, title) => {
     dispatch(getCourseLectures(courseId));
+    setCourseId(courseId);
+    setCourseTitle(title);
     onOpen();
   };
-  const deleteButtonHandler =async courseId => {
-await dispatch(deleteCourse(courseId));
-dispatch(loadUser())
+  const deleteButtonHandler = async courseId => {
+    await dispatch(deleteCourse(courseId));
+    dispatch(loadUser());
   };
   useEffect(() => {
     if (message) {
@@ -49,10 +58,18 @@ dispatch(loadUser())
     }
   }, [dispatch, message, error]);
 
-  const addLectureHandler = (e, id, title, courseId, description) => {
+  const addLectureHandler = (e, courseId, title, description, video) => {
     e.preventDefault();
+    const myForm = new FormData();
+    myForm.append('title', title);
+    myForm.append('description', description);
+    myForm.append('file', video);
+    dispatch(addLecture(courseId,myForm));
   };
-  const deleteLectureButtonHandler = courseId => {};
+  const deleteLectureButtonHandler = (courseId, lectureId) => {
+    dispatch(deleteLecture(courseId,lectureId));
+    console.log(lectureId, courseId);
+  };
 
   useEffect(() => {
     dispatch(getAllCourses());
@@ -102,9 +119,9 @@ dispatch(loadUser())
         <CourseModal
           onClose={onClose}
           isOpen={isOpen}
-          deleteButtonHandler={deleteLectureButtonHandler}
-          id={'courseId'}
-          courseTitle="React Course"
+          deleteLectureButtonHandler={deleteLectureButtonHandler}
+          id={courseId}
+          courseTitle={courseTitle}
           addLectureHandler={addLectureHandler}
           lectures={lectures}
         />
@@ -137,7 +154,7 @@ function Row({ item, courseDetailsHandler, deleteButtonHandler }) {
             View Lectures
           </Button>
           <Button
-            onClick={() => deleteButtonHandler(item._id)}
+            onClick={() => deleteButtonHandler(item._id, item.title)}
             color={'purple.600'}
           >
             <RiDeleteBin7Fill />
