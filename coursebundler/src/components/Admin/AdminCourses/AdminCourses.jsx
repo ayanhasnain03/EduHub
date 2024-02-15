@@ -58,17 +58,18 @@ const AdminCourses = () => {
     }
   }, [dispatch, message, error]);
 
-  const addLectureHandler = (e, courseId, title, description, video) => {
+  const addLectureHandler = async (e, courseId, title, description, video) => {
     e.preventDefault();
     const myForm = new FormData();
     myForm.append('title', title);
     myForm.append('description', description);
     myForm.append('file', video);
-    dispatch(addLecture(courseId,myForm));
+    await dispatch(addLecture(courseId, myForm));
+    await dispatch(loadUser())
   };
   const deleteLectureButtonHandler = (courseId, lectureId) => {
-    dispatch(deleteLecture(courseId,lectureId));
-  dispatch(loadUser())
+    dispatch(deleteLecture(courseId, lectureId));
+    dispatch(loadUser());
   };
 
   useEffect(() => {

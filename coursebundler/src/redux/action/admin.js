@@ -49,7 +49,7 @@ export const addLecture = (id, formdata) => async dispatch => {
       formdata,
       config
     );
-    dispatch({ type: 'addLectureSuccess', payload: data.message });
+    dispatch({ type: 'addLectureSuccess', payload: data });
   } catch (error) {
     dispatch({
       type: 'addLectureFail',

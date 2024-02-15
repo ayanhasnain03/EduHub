@@ -28,7 +28,7 @@ export const createCourse = createReducer({}, builder => {
     })
     .addCase('addLectureSuccess', (state, action) => {
       state.loading = false;
-      state.message = action.payload;
+      state.message = action.payload.message;
     })
     .addCase('addLectureFail', (state, action) => {
       state.loading = false;
