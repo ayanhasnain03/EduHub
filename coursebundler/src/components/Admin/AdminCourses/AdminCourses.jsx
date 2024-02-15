@@ -68,7 +68,7 @@ const AdminCourses = () => {
   };
   const deleteLectureButtonHandler = (courseId, lectureId) => {
     dispatch(deleteLecture(courseId,lectureId));
-    console.log(lectureId, courseId);
+  dispatch(loadUser())
   };
 
   useEffect(() => {
