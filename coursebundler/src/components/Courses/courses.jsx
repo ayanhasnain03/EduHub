@@ -85,12 +85,13 @@ const Courses = () => {
   const dispatch = useDispatch();
   const [keyword, setkeyword] = useState('');
   const [category, setCategory] = useState('');
-  const addToPlaylistHandler = async courseId => {
+
+  const addToPlaylistHandler = courseId => {
     dispatch(addToPlaylist(courseId));
-    dispatch(loadUser());
+
   };
   const categories = [
-    'webdevelopemnt',
+    'Web Developemnt',
     'Machine Learning',
     'Data Structure',
     'Andriod Developemnt',
@@ -103,8 +104,9 @@ const Courses = () => {
   useEffect(() => {
     dispatch(getAllCourses(category, keyword));
     if (message) {
-      toast.success(message);
-      dispatch({ type: 'clearMessage' });
+      toast.success(message)
+      dispatch({ type: 'clearMessage' })
+      dispatch(loadUser())
     }
     if (error) {
       toast.error(error);

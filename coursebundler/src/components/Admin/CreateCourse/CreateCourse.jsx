@@ -52,7 +52,6 @@ const CreateCourse = () => {
     myForm.append('createdBy', createdBy);
     myForm.append('file', image);
     dispatch(createCourse(myForm));
-    console.log(myForm);
   };
 
   useEffect(() => {

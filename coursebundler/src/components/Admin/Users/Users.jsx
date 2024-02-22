@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Box,
   Button,
@@ -17,25 +17,38 @@ import {
 import cursor from '../../../assets/images/cursor.png';
 import SideBar from '../SideBar';
 import { RiDeleteBin7Fill } from 'react-icons/ri';
-
+import {
+  deleteUser,
+  getAllUsers,
+  updateUserRole,
+} from '../../../redux/action/admin';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadUser } from '../../../redux/action/user';
+import tost, { toast } from 'react-hot-toast';
 const Users = () => {
-  const users = [
-    {
-      _id: 'sdfsdfsdfsd',
-      name: 'ayan',
-      role: 'admin',
-      subscription: {
-        status: 'active',
-      },
-      email: 'asgsasdsi@gmail.com',
-    },
-  ];
-  const updateHandler = userId => {
-    console.log(userId);
+  const dispatch = useDispatch();
+  const { user, message, loading, error } = useSelector(state => state.admin);
+
+  const updateHandler = async userId => {
+    await dispatch(updateUserRole(userId));
+    dispatch(loadUser());
   };
-  const deleteButtonHandler = userId => {
-    console.log(userId);
+  const deleteButtonHandler =async userId => {
+   await dispatch(deleteUser(userId));
+   await dispatch(loadUser());
+    toast.success("User Deleted SuccesFully")
   };
+
+  useEffect(() => {
+    dispatch(getAllUsers());
+    if (message) {
+      tost.success(message);
+    }
+    if (error) {
+      tost.error(error);
+    }
+  }, [dispatch, message, error]);
+
   return (
     <Grid
       css={{
@@ -65,14 +78,16 @@ const Users = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {users.map(item => (
-                <Row
-                  key={item._id}
-                  item={item}
-                  deleteButtonHandler={deleteButtonHandler}
-                  updateHandler={updateHandler}
-                />
-              ))}
+              {user &&
+                user.map(item => (
+                  <Row
+                    key={item._id}
+                    item={item}
+                    deleteButtonHandler={deleteButtonHandler}
+                    updateHandler={updateHandler}
+                    loading={loading}
+                  />
+                ))}
             </Tbody>
           </Table>
         </TableContainer>
@@ -84,14 +99,18 @@ const Users = () => {
 
 export default Users;
 
-function Row({ item, updateHandler, deleteButtonHandler }) {
+function Row({ item, updateHandler, deleteButtonHandler, loading }) {
   return (
     <Tr>
       <Td>{item._id}</Td>
       <Td>{item.name}</Td>
       <Td>{item.email}</Td>
       <Td>{item.role}</Td>
-      <Td>{item.subscription.status === 'active' ? 'Active' : 'Not Active'}</Td>
+      <Td>
+        {item.subscription && item.subscription.status === 'active'
+          ? 'Active'
+          : 'Not Active'}
+      </Td>
       <Td isNumeric>
         <HStack justifyContent={'flex-end'}>
           <Button
@@ -102,6 +121,7 @@ function Row({ item, updateHandler, deleteButtonHandler }) {
             Change Role
           </Button>
           <Button
+            isLoading={loading}
             onClick={() => deleteButtonHandler(item._id)}
             color={'purple.600'}
           >

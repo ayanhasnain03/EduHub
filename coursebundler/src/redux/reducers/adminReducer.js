@@ -12,6 +12,39 @@ export const createCourse = createReducer({}, builder => {
       state.loading = false;
       state.error = action.payload;
     })
+    .addCase('getAllUsersRequest', state => {
+      state.loading = true;
+    })
+    .addCase('getAllUsersSuccess', (state, action) => {
+      state.loading = false;
+      state.user = action.payload;
+    })
+    .addCase('getAllUsersFail', (state, action) => {
+      state.loading = false;
+      state.error = action.payload.error;
+    })
+    .addCase('updateUserRoleRequest', state => {
+      state.loading = true;
+    })
+    .addCase('updateUserRoleSuccess', (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase('updateUserRoleFail', (state, action) => {
+      state.loading = false;
+      state.error = action.payload.error;
+    })
+    .addCase('deleteUsersRequest', state => {
+      state.loading = true;
+    })
+    .addCase('deleteUsersSuccess', (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+    })
+    .addCase('deleteUsersFail', (state, action) => {
+      state.loading = false;
+      state.error = action.payload.error;
+    })
     .addCase('deleteCourseRequest', state => {
       state.loading = true;
     })

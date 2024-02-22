@@ -75,3 +75,48 @@ export const deleteLecture = (courseId, lectureId) => async dispatch => {
     });
   }
 };
+export const getAllUsers = (courseId, lectureId) => async dispatch => {
+  try {
+    dispatch({ type: 'getAllUsersRequest' });
+    const config = {
+      withCredentials: true,
+    };
+    const { data } = await axios.get(`${server}/admin/users`, config);
+    dispatch({ type: 'getAllUsersSuccess', payload: data.user });
+  } catch (error) {
+    dispatch({
+      type: 'getAllUsersFail',
+      payload: error.response.data.message,
+    });
+  }
+};
+export const updateUserRole = id => async dispatch => {
+  try {
+    dispatch({ type: 'updateUserRoleRequest' });
+    const config = {
+      withCredentials: true,
+    };
+    const { data } = await axios.put(`${server}/admin/user/${id}`, {}, config);
+    dispatch({ type: 'updateUserRoleSuccess', payload: data.message });
+  } catch (error) {
+    dispatch({
+      type: 'updateUserRoleFail',
+      payload: error.response.data.message,
+    });
+  }
+};
+export const deleteUser = id => async dispatch => {
+  try {
+    dispatch({ type: 'deleteUserRequest' });
+    const config = {
+      withCredentials: true,
+    };
+    const { data } = await axios.delete(`${server}/admin/user/${id}`, config);
+    dispatch({ type: 'deleteUserSuccess', payload: data.message});
+  } catch (error) {
+    dispatch({
+      type: 'deleteUserFail',
+      payload: error.response.data.message,
+    });
+  }
+};

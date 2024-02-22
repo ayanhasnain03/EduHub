@@ -61,9 +61,14 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/courses" element={<Courses />} />
-            <Route path="/course/:id" element={<ProtectedRoute isAuthenticated={isAuthenticated} >
-              <CoursePage user={user} />
-            </ProtectedRoute>} />
+            <Route
+              path="/course/:id"
+              element={
+                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                  <CoursePage user={user} />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/login"
               element={
@@ -89,14 +94,25 @@ const App = () => {
             <Route
               path="/forgetpassword"
               element={
-                <ProtectedRoute isAuthenticated={!isAuthenticated} redirect="/profile" >
+                <ProtectedRoute
+                  isAuthenticated={!isAuthenticated}
+                  redirect="/profile"
+                >
                   <ForgetPassword />
                 </ProtectedRoute>
               }
             />
-            <Route path="/resetpassword/:token" element={ <ProtectedRoute isAuthenticated={!isAuthenticated} redirect="/profile" >
-                  <ResetPassword/>
-                </ProtectedRoute>} />
+            <Route
+              path="/resetpassword/:token"
+              element={
+                <ProtectedRoute
+                  isAuthenticated={!isAuthenticated}
+                  redirect="/profile"
+                >
+                  <ResetPassword />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/contact" element={<Contact />} />
             <Route path="/request" element={<Request />} />
             <Route path="/about" element={<About />} />
