@@ -5,14 +5,14 @@ import {
   userReducer,
 } from './reducers/userReducer';
 import { course } from './reducers/courseReducer';
-import { createCourse } from './reducers/adminReducer';
+import { adminReducer } from './reducers/adminReducer';
 const store = configureStore({
   reducer: {
     user: userReducer,
     profile: profileReducer,
     course: course,
     subscription: subscriptionReducer,
-    admin: createCourse,
+    admin: adminReducer,
   },
 });
 export default store;

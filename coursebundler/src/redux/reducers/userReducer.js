@@ -129,6 +129,17 @@ export const profileReducer = createReducer({}, builder => {
       state.loading = false;
       state.error = action.payload;
     })
+    .addCase('contactRequest', state => {
+      state.loading = true;
+    })
+    .addCase('contactSuccess', (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase('contactFail', (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
     .addCase('clearError', state => {
       state.error = null;
     })

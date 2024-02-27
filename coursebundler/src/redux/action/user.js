@@ -95,3 +95,29 @@ export const cancelSubscription = () => async dispatch => {
     });
   }
 };
+
+export const contact = (name, email, message) => async dispatch => {
+  try {
+    dispatch({ type: 'contactRequest' });
+    const { data } = await axios.post(
+      `${server}/contact`,
+      {
+        name,
+        email,
+        message,
+      },
+      {
+        headers: {
+          'Content-type': 'application/json',
+        },
+        withCredentials: true,
+      }
+    );
+    dispatch({ type: 'contactSuccess', payload: data.message });
+  } catch (error) {
+    dispatch({
+      type: 'contactFail',
+      payload: error.response.data.message,
+    });
+  }
+};

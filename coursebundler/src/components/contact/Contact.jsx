@@ -9,17 +9,24 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { contact } from '../../redux/action/user';
 
 const Contact = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const dispatch = useDispatch();
+  const submitHandler = e => {
+    e.preventDefault();
+    dispatch(contact(name,email, message));
+  };
   return (
     <Container h="92vh">
-      <VStack h="full"  justifyContent={"center"} spacing="16">
+      <VStack h="full" justifyContent={'center'} spacing="16">
         <Heading children="Contact Us" />
-        <form style={{ width: '100%' }}>
+        <form style={{ width: '100%' }} onSubmit={submitHandler}>
           <Box my={'4'}>
             <FormLabel htmlFor="name" children="Name" />
             <Input
@@ -49,7 +56,7 @@ const Contact = () => {
           <Box my={'4'}>
             <FormLabel htmlFor="message" children="Message" />
             <Textarea
-            resize={"none"}
+              resize={'none'}
               required
               id="message"
               value={message}
