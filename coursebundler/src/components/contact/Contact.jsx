@@ -8,20 +8,33 @@ import {
   Textarea,
   VStack,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { contact } from '../../redux/action/user';
+import { contact } from '../../redux/action/otherAction';
+import toast from 'react-hot-toast';
 
 const Contact = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
+  const [contactMessage, setcontactMessage] = useState('');
   const dispatch = useDispatch();
+  const { error, loading, message } = useSelector(state => state.other);
+  console.log(message)
   const submitHandler = e => {
     e.preventDefault();
-    dispatch(contact(name,email, message));
+    dispatch(contact(name, email, contactMessage));
   };
+  useEffect(() => {
+    if (message) {
+      toast.success(message);
+      dispatch({ type: 'clearMessage' });
+    }
+    if (error) {
+      toast.error(error);
+      dispatch({ type: 'clearError' });
+    }
+  }, [dispatch, error]);
   return (
     <Container h="92vh">
       <VStack h="full" justifyContent={'center'} spacing="16">
@@ -60,14 +73,19 @@ const Contact = () => {
               required
               id="message"
               value={message}
-              onChange={e => setMessage(e.target.value)}
+              onChange={e => setcontactMessage(e.target.value)}
               placeholder="Your Message..."
               type={'text'}
               focusBorderColor={'yellow.500'}
             />
           </Box>
 
-          <Button my="4" colorScheme={'yellow'} type="submit">
+          <Button
+            my="4"
+            colorScheme={'yellow'}
+            type="submit"
+            isLoading={loading}
+          >
             Send Mail
           </Button>
 

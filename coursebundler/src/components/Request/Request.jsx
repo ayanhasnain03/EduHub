@@ -8,18 +8,37 @@ import {
   Textarea,
   VStack,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { requestCourse } from '../../redux/action/otherAction';
+import toast from 'react-hot-toast';
 const Request = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [course, setCourse] = useState('');
+  const dispatch = useDispatch();
+  const { message, error, loading } = useSelector(state => state.other);
+  const submitHandler = e => {
+    e.preventDefault();
+    dispatch(requestCourse(name, email, course));
+  };
+  useEffect(() => {
+    if (message) {
+      toast.success(message);
+      dispatch({ type: 'clearMessage' });
+    }
+    if (error) {
+      toast.error(error);
+      dispatch({ type: 'clearError' });
+    }
+  }, [dispatch, message, error]);
+
   return (
     <Container h="92vh">
       <VStack h="full" justifyContent={'center'} spacing="16">
-        <Heading children="Contact Us" />
-        <form style={{ width: '100%' }}>
+        <Heading children="Request Course" />
+        <form style={{ width: '100%' }} onSubmit={submitHandler}>
           <Box my={'4'}>
             <FormLabel htmlFor="name" children="Name" />
             <Input
@@ -60,15 +79,20 @@ const Request = () => {
             />
           </Box>
 
-          <Button my="4" colorScheme={'yellow'} type="submit">
+          <Button
+            isLoading={loading}
+            my="4"
+            colorScheme={'yellow'}
+            type="submit"
+          >
             Send Mail
           </Button>
 
           <Box my="4">
-           See available Courses ! {'  '}
+            See available Courses ! {'  '}
             <Link to="/courses">
               <Button variant="link" colorScheme={'yellow'}>
-                click 
+                click
               </Button>{' '}
               here
             </Link>

@@ -6,6 +6,7 @@ import {
 } from './reducers/userReducer';
 import { course } from './reducers/courseReducer';
 import { adminReducer } from './reducers/adminReducer';
+import { otherReducer } from './reducers/otherReducer';
 const store = configureStore({
   reducer: {
     user: userReducer,
@@ -13,6 +14,7 @@ const store = configureStore({
     course: course,
     subscription: subscriptionReducer,
     admin: adminReducer,
+    other:otherReducer
   },
 });
 export default store;
