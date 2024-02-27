@@ -20,7 +20,6 @@ const Contact = () => {
   const [contactMessage, setcontactMessage] = useState('');
   const dispatch = useDispatch();
   const { error, loading, message } = useSelector(state => state.other);
-  console.log(message)
   const submitHandler = e => {
     e.preventDefault();
     dispatch(contact(name, email, contactMessage));
@@ -34,7 +33,7 @@ const Contact = () => {
       toast.error(error);
       dispatch({ type: 'clearError' });
     }
-  }, [dispatch, error]);
+  }, [dispatch, error, message]);
   return (
     <Container h="92vh">
       <VStack h="full" justifyContent={'center'} spacing="16">

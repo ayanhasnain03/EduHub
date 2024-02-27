@@ -13,6 +13,7 @@ export const adminReducer = createReducer({}, builder => {
       state.usersCount = action.payload.usersCount;
       state.subscriptionPercentage = action.payload.subscriptionPercentage;
       state.viewsPercentage = action.payload.viewsPercentage;
+      state.usersPercentage = action.payload.usersPercentage;
       state.viewsProfit = action.payload.viewsProfit;
       state.usersProfit = action.payload.usersProfit;
       state.subscriptionProfit = action.payload.subscriptionProfit;
