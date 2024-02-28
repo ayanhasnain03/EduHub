@@ -95,6 +95,5 @@ function getLastYearMonths() {
       labels.unshift(months[i]);
     }
   }
-
   return labels;
 }
