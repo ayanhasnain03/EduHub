@@ -79,7 +79,7 @@ const Subscribe = ({ user }) => {
               spacing="8"
               children={`Join Pro Pack and Get Access to all content.`}
             />
-            <Heading size="md" children={' ₹599 Only'} />
+            <Heading size="md" children={' ₹299 Only'} />
           </VStack>
           <Button
             my="8"
